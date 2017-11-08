@@ -1,0 +1,885 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Risk_Manager</class>
+ <widget class="QMainWindow" name="Risk_Manager">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1900</width>
+    <height>1060</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Risk Manager</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1881</width>
+      <height>1011</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Datenbank Editieren</string>
+     </attribute>
+     <widget class="QTreeWidget" name="data_edit_dataTree">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>70</y>
+        <width>1641</width>
+        <height>911</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <property name="columnCount">
+       <number>10</number>
+      </property>
+      <attribute name="headerMinimumSectionSize">
+       <number>10</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string/>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string notr="true">ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Gefährdung</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ereignis oder Schutzziel</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Risikominderung, Lösung/Schutzmaßnahme</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Schadensausmaß</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Eintrittswahrscheinlichkeit</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat. 1</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat. 2</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat. 3</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignCenter</set>
+       </property>
+      </column>
+      <item>
+       <property name="text">
+        <string>Einstellungen</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>S0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+       <item>
+        <property name="text">
+         <string>default Elemente</string>
+        </property>
+        <property name="text">
+         <string>S1</string>
+        </property>
+        <property name="flags">
+         <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+        </property>
+        <item>
+         <property name="text">
+          <string>default Risiko</string>
+         </property>
+         <property name="text">
+          <string>S1.1</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUES RISIKO-</string>
+          </property>
+          <property name="text">
+           <string>S1.1.1</string>
+          </property>
+          <property name="text">
+           <string>GEFÄHRDUNG</string>
+          </property>
+          <property name="text">
+           <string>EREIGNIS</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>default Gruppe</string>
+         </property>
+         <property name="text">
+          <string>S1.2</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUE GRUPPE-</string>
+          </property>
+          <property name="text">
+           <string>S1.2.1</string>
+          </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>default Risiko Minderung</string>
+         </property>
+         <property name="text">
+          <string>S1.3</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUE MINDERUNG-</string>
+          </property>
+          <property name="text">
+           <string>S1.3.1</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>- MINDERUNG HIER EINTRAGEN-</string>
+          </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>default Lebensphase</string>
+         </property>
+         <property name="text">
+          <string>S1.4</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUE LEBENSPHASE-</string>
+          </property>
+          <property name="text">
+           <string>S1.4.1</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>default Checkbox</string>
+         </property>
+         <property name="text">
+          <string>S1.5</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUE CHECKBOX-</string>
+          </property>
+          <property name="text">
+           <string>S1.5.1</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>default Verknüpfung</string>
+         </property>
+         <property name="text">
+          <string>S1.6</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>-NEUE VERKNÜPFUNG-</string>
+          </property>
+          <property name="text">
+           <string>S1.6.1</string>
+          </property>
+         </item>
+        </item>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Gruppen</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>G0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Risiken</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>R0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Risiko Minderungen</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>M0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Lebensphasen</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>L0</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Checkbox</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>C0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Verknüpfung</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>V0</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="data_edit_button_save">
+      <property name="geometry">
+       <rect>
+        <x>1190</x>
+        <y>10</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SAVE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="data_edit_button_remove">
+      <property name="geometry">
+       <rect>
+        <x>1660</x>
+        <y>70</y>
+        <width>191</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>REMOVE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="data_edit_button_open">
+      <property name="geometry">
+       <rect>
+        <x>1090</x>
+        <y>10</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>OPEN</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Geöffnete Datenbank:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="data_edit_lineEdit_currentOpenedFile">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>10</y>
+        <width>951</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="data_edit_button_save_as">
+      <property name="geometry">
+       <rect>
+        <x>1290</x>
+        <y>10</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SAVE AS</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="data_edit_groupBox_add">
+      <property name="geometry">
+       <rect>
+        <x>1650</x>
+        <y>100</y>
+        <width>211</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>ADD</string>
+      </property>
+      <widget class="QPushButton" name="data_edit_button_add_group">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gruppe</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_add_risk">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Risiko</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_add_risk_reduction">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Risiko Minderung</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_link_risk_to_group">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>120</y>
+         <width>191</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Risiken zu Gruppen hinzufügen</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_add_lifecycle">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>20</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Lebensphase</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_add_checkbox">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>50</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checkbox</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="data_edit_button_add_link">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>80</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Verknüpfung</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>1700</x>
+        <y>510</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DEBUG</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Lebensphasen editieren</string>
+     </attribute>
+     <widget class="QPushButton" name="doc_edit_button_save_as_document">
+      <property name="geometry">
+       <rect>
+        <x>1290</x>
+        <y>40</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SAVE AS</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_open_document">
+      <property name="geometry">
+       <rect>
+        <x>1090</x>
+        <y>40</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>OPEN</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_save_document">
+      <property name="geometry">
+       <rect>
+        <x>1190</x>
+        <y>40</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SAVE</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="doc_edit_lineEdit_currentOpened_document">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>40</y>
+        <width>951</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="doc_edit_label_opened_document">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Geöffnetes Dokument:</string>
+      </property>
+     </widget>
+     <widget class="QTreeWidget" name="doc_edit_treeWidget_database">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>70</y>
+        <width>300</width>
+        <height>911</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <attribute name="headerDefaultSectionSize">
+       <number>100</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string/>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTreeWidget" name="doc_edit_treeWidget_document">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>70</y>
+        <width>1561</width>
+        <height>911</height>
+       </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::DoubleClicked</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <attribute name="headerDefaultSectionSize">
+       <number>100</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string/>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Gefährdung</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ereignis oder Schutzziel</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Risikominderung, Lösung/Schutzmaßnahme</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Schadensausmaß</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Eintrittswahrscheinlichkeit</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat 1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat 2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kat 3</string>
+       </property>
+      </column>
+      <item>
+       <property name="text">
+        <string>Lebensphasen</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>L0</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_remove">
+      <property name="geometry">
+       <rect>
+        <x>1420</x>
+        <y>0</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>REMOVE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_add_lifecycle">
+      <property name="geometry">
+       <rect>
+        <x>1420</x>
+        <y>30</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ADD LIFECYCLE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_link_risk_to_lifecycle">
+      <property name="geometry">
+       <rect>
+        <x>1520</x>
+        <y>30</y>
+        <width>211</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Risiko manuell zu Lebensphase hinzufügen</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_plot_pdf">
+      <property name="geometry">
+       <rect>
+        <x>1740</x>
+        <y>30</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Plot PDF</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_add_risks_from_rules">
+      <property name="geometry">
+       <rect>
+        <x>1520</x>
+        <y>0</y>
+        <width>211</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Risiken nach Regeln hinzufügen</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="doc_edit_button_set_checklist">
+      <property name="geometry">
+       <rect>
+        <x>1740</x>
+        <y>0</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gerät spezifizieren</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
