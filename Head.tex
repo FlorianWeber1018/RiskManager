@@ -1,0 +1,46 @@
+\documentclass[a4paper,9pt,landscape]{article}
+
+\usepackage[a4paper, landscape, margin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{dsfont}
+\usepackage{here}
+\usepackage[ngerman]{babel}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{longtable}
+\usepackage{hhline}
+\usepackage{makecell}
+\usepackage{tabularx}
+
+
+
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % linksbündig mit Breitenangabe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+
+
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\setlength{\arrayrulewidth}{1pt}
+\begin{longtable}{|L{4.5cm}|L{5cm}|L{3.1cm}|L{6.2cm}|L{1.7cm}|C{1.7cm}|C{1cm}|C{1cm}|C{1cm}|}
+\hline
+
+\multicolumn{9}{|c|}
+{{\cellcolor[HTML]{BFBFBF}}\large{\textbf{Risikobewertung (Identifizierung der Gefährdungen)}}}\\
+\hhline{---------}
+
+{\cellcolor[HTML]{BFBFBF}}&{\cellcolor[HTML]{BFBFBF}}	 & {\cellcolor[HTML]{BFBFBF}}	& {\cellcolor[HTML]{BFBFBF}}	& \multicolumn{5}{c|}{{\cellcolor[HTML]{BFBFBF}}Risikoeinschätzung}\\
+\hhline{|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|-----}
+
+{\cellcolor[HTML]{BFBFBF}}	&{\cellcolor[HTML]{BFBFBF}}	&{\cellcolor[HTML]{BFBFBF}}	&{\cellcolor[HTML]{BFBFBF}}	&{\cellcolor[HTML]{BFBFBF}} & {\cellcolor[HTML]{BFBFBF}} & \multicolumn{3}{c|}{{\cellcolor[HTML]{BFBFBF}}Risikokategorie}\\
+\hhline{|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|>{\arrayrulecolor[HTML]{BFBFBF}}->{\arrayrulecolor{black}}|---}
+{\cellcolor[HTML]{BFBFBF}} &{\cellcolor[HTML]{BFBFBF}} & {\cellcolor[HTML]{BFBFBF}}&{\cellcolor[HTML]{BFBFBF}} & {\cellcolor[HTML]{BFBFBF}}&{\cellcolor[HTML]{BFBFBF}} &{\cellcolor[HTML]{92d050}} & {\cellcolor[HTML]{FFFF00}}&{\cellcolor[HTML]{FF0000}}\\
+
+{\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-4}{*}{Lebensphase}} &{\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-4}{*}{Gefährdung}} &{\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-4}{*}{\shortstack{Ereignis oder\\Schutzziel}}} & {\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-4}{*}{\shortstack{Risikominderung,\\Lösung/Schutzmaßnahme}}}&{\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-3}{*}{\shortstack{Schadens-\\ausmaß}}}& {\cellcolor[HTML]{BFBFBF}}\makecell{\multirow{-3}{*}{\shortstack{Eintritts-\\wahrschein-\\lichkeit}}}&{\cellcolor[HTML]{92d050}}\makecell{\multirow{-2}{*}{Kat. 1}} & {\cellcolor[HTML]{FFFF00}}\makecell{\multirow{-2}{*}{Kat. 2}} & {\cellcolor[HTML]{FF0000}}\makecell{\multirow{-2}{*}{Kat. 3}}\\
+\hhline{|-|-|-|-|-|-|-|-|-|}
+\endhead
