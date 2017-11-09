@@ -12,14 +12,21 @@
 #define colKat1 7
 #define colKat2 8
 #define colKat3 9
-#define colId 1
+
 #define colName 0
+#define colId 1
+#define colEndangering 2
+#define colEvent 3
 #define colRiskReduction 4
+
 #define colCheck 2
+#define colCheckedBoxesStart 2
 
 #define colCondition 2
 #define colsrc 3
 #define coldest 4
+
+
 
 #define IdSetting "S"
 #define IdRisk "R"
@@ -34,7 +41,7 @@
 #define SettingDefaultLifecycle "S1.4.1"
 #define SettingDefaultCheckbox "S1.5.1"
 #define SettingDefaultLink "S1.6.1"
-#define colCheckedBoxesStart 2
+
 enum operation
 {
     OR, AND
@@ -143,6 +150,7 @@ private:
     bool addNewTreeWidgetItem(QTreeWidget* tree, QString ItemType, QTreeWidgetItem* Itemdefault);
     int getKat(int DamageExtent, int DamageProbability);
     void removeAllItemsWhosMatch(QTreeWidget* tree, QList<QString> searchList, Qt::MatchFlag matchcondition, int searchcol);
+    QString removeAllCharWhosMatch(QString input, char m_char);
     QTreeWidgetItem* copy_leaf_source_to_destination(QTreeWidgetItem* src, QTreeWidgetItem* dest);
     QTreeWidgetItem* copy_branch_source_to_destination(bool resolvebranch, QTreeWidgetItem* branch, QTreeWidgetItem* dest);
     QTreeWidgetItem* copy_dist_branch_source_to_destination(bool resolvebranch, QTreeWidgetItem* branch, QTreeWidgetItem* dest);
@@ -153,9 +161,13 @@ private:
     bool resolveOperation(bool input0, operation m_operation, bool input1);
     QString resolveOperation(QString input0, QString m_operation, QString input1);
     bool determineCheckstate(QString Checkbox);
+    bool validateCondition(QList<QString>* Condition);
+    bool elementIdExistInDb(QString Id);
+
 };
 
 QList<QString> StringToList(QString inputString, char seperator);
+QString ListStringToString(QList<QString> inputList);
 bool cmpStrings(QString A, QString B, int startA, int endA, int Boffset);
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck);
 #endif // RISK_MANAGER_H

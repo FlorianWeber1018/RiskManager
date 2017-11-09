@@ -398,21 +398,93 @@ void Risk_Manager::on_data_edit_dataTree_itemDoubleClicked(QTreeWidgetItem *item
     if(column==colId){
         return;
     }
-    if(column==colRiskReduction){
-        if(cmpStrings(IdRisk, item->text(colId), 0, sizeof(IdRisk)-2,0)){
-            show_editSeletableRiskReduction(item);
+    if(column>colDamageProbability){
+        return;
+    }
+    if(cmpStrings(IdLink, item->text(colCondition), 0, sizeof(IdLink)-2,0)){
+        if(column<=coldest){
+            ui->data_edit_dataTree->editItem(item, column);
+            return;
         }
-
-        if(cmpStrings(IdRiskReduction, item->text(colId), 0, sizeof(IdRiskReduction)-2,0) || cmpStrings(IdLink, item->text(colId), 0, sizeof(IdLink)-2,0)){
-           ui->data_edit_dataTree->editItem(item, column);
+    }
+    if(cmpStrings(IdRisk, item->text(colId), 0, sizeof(IdRisk)-2,0)){
+        if(column==colRiskReduction){
+            show_editSeletableRiskReduction(item);
+        }else{
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
+    if(cmpStrings(IdRiskReduction, item->text(colId), 0, sizeof(IdRiskReduction)-2,0)){
+        if(column==colRiskReduction){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
+    if(cmpStrings(IdRiskReduction, item->text(colId), 0, sizeof(IdRiskReduction)-2,0)){
+        if(column==colRiskReduction){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
+    if(cmpStrings(IdLifecycle, item->text(colId), 0, sizeof(IdLifecycle)-2,0)){
+        if(column==colName){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
+    if(cmpStrings(IdGroup, item->text(colId), 0, sizeof(IdGroup)-2,0)){
+        if(column==colName){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
+    if(cmpStrings(IdSetting, item->text(colId), 0, sizeof(IdSetting)-2,0)){
+        if(cmpStrings(SettingDefaultRisk, item->text(colId), 0, sizeof(SettingDefaultRisk)-2,0)){ //default Risiko
+            if(column<=colEvent){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
+            if(column==colRiskReduction){
+                show_editSeletableRiskReduction(item);
+            }
+        }
+        if(cmpStrings(SettingDefaultGroup, item->text(colId), 0, sizeof(SettingDefaultGroup)-2,0)){ //default Group
+            if(column==colName){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
+        }
+        if(cmpStrings(SettingDefaultRiskReduction, item->text(colId), 0, sizeof(SettingDefaultRiskReduction)-2,0)){ //default Risiko Minderung
+            if(column==colName){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
+            if(column==colRiskReduction){
+                show_editSeletableRiskReduction(item);
+            }
+        }
+        if(cmpStrings(SettingDefaultLifecycle, item->text(colId), 0, sizeof(SettingDefaultLifecycle)-2,0)){ //default Lebensphase
+            if(column==colName){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
+        }
+        if(cmpStrings(SettingDefaultCheckbox, item->text(colId), 0, sizeof(SettingDefaultCheckbox)-2,0)){ //default Checkbox
+            if(column==colName){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
+        }
+        if(cmpStrings(SettingDefaultLink, item->text(colId), 0, sizeof(SettingDefaultLink)-2,0)){ //default Verknüpfung
+            if(column==colName){
+               ui->data_edit_dataTree->editItem(item, column);
+            }
         }
 
         return;
     }
-
-    ui->data_edit_dataTree->editItem(item, column);
-
-
+    if(cmpStrings(IdCheckbox, item->text(colId), 0, sizeof(IdCheckbox)-2,0)){
+        if(column==colName){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        return;
+    }
 }
 void Risk_Manager::on_data_edit_button_open_clicked()
 {
@@ -626,6 +698,7 @@ void Risk_Manager::on_doc_edit_button_plot_pdf_clicked()
     qtreewidget_totextable mytexconv;
     QString texString = "";
     texString.append(read_file(QCoreApplication::applicationDirPath()+"/Head.tex"));
+
     texString.append(mytexconv.convert_treetotextable(ui->doc_edit_treeWidget_document));
     texString.append(read_file(QCoreApplication::applicationDirPath()+"/Feet.tex"));
 
@@ -943,6 +1016,16 @@ void Risk_Manager::removeAllItemsWhosMatch(QTreeWidget* tree, QList<QString> sea
         }
     }
 }
+QString Risk_Manager::removeAllCharWhosMatch(QString input, char m_char){
+    for(int i=0; i < input.length(); i++){
+        if(input[i]==m_char){
+            QString temp=input.left(i);
+            temp.append(input.right(input.length()-(i+1)));
+            input=temp;
+        }
+    }
+    return input;
+}
 void Risk_Manager::data_edit_clear_selection(){
     foreach(QTreeWidgetItem* item, ui->data_edit_dataTree->selectedItems()){
         item->setSelected(false);
@@ -979,19 +1062,44 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
                 item->setText(colKat3, "");
             }
         }
-            QList<QTreeWidgetItem*> listItemToChange = ui->data_edit_dataTree->findItems(item->text(colId),Qt::MatchExactly | Qt::MatchRecursive,colId);
-            listItemToChange = searchItems(listItemToChange, IdRisk, Qt::MatchStartsWith, colId);
-            foreach(QTreeWidgetItem* itemToChange, listItemToChange){
-                copyallcols(itemToChange, item);
+        QList<QTreeWidgetItem*> listItemToChange = ui->data_edit_dataTree->findItems(item->text(colId),Qt::MatchExactly | Qt::MatchRecursive,colId);
+        listItemToChange = searchItems(listItemToChange, IdRisk, Qt::MatchStartsWith, colId);
+        foreach(QTreeWidgetItem* itemToChange, listItemToChange){
+            copyallcols(itemToChange, item);
         }
     }
 }
+
 int Risk_Manager::getKat(int DamageExtent, int DamageProbability){
     if(DamageExtent >= 1 && DamageExtent <=4 && DamageProbability >=1 && DamageProbability <= 5){
             static const int mtx[4][5]={{1,1,1,1,2},{1,1,1,2,3},{1,2,2,3,3},{2,2,3,3,3}};
             return mtx[DamageExtent-1][DamageProbability-1];
     }
     return 0;
+}
+
+bool Risk_Manager::validateCondition(QList<QString>* Condition){
+    for(int i=0; i<Condition->length(); i++){
+        QString m_str = Condition->at(i);
+        m_str = removeAllCharWhosMatch(m_str, ' ');
+        Condition->removeAt(i);
+        Condition->insert(i, m_str);
+        if(m_str=="|" || m_str=="&"){
+
+        }else{
+            if(cmpStrings(IdCheckbox, m_str, 0, sizeof(IdCheckbox)-2,0)){
+                if(elementIdExistInDb(m_str)){
+
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+
+        }
+    }
+    return true;
 }
 
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck){
@@ -1155,6 +1263,7 @@ bool Risk_Manager::resolveOperation(bool input0, operation m_operation, bool inp
     if(m_operation==AND){
         return input0 && input1;
     }
+    return false;
 }
 bool Risk_Manager::determineCheckstate(QString Checkbox){
     bool invertResult=false;
@@ -1196,7 +1305,13 @@ void Risk_Manager::on_doc_edit_button_set_checklist_clicked()
 {
     show_editDeviceSpecifications();
 }
-
+bool Risk_Manager::elementIdExistInDb(QString Id){
+    if(ui->data_edit_dataTree->findItems(Id, Qt::MatchExactly | Qt::MatchRecursive, colId).isEmpty()){
+        return false;
+    }else{
+        return true;
+    }
+}
 void Risk_Manager::on_pushButton_2_clicked()
 {
 
@@ -1216,5 +1331,10 @@ QList<QString> StringToList(QString inputString, char separator){
     ResultList.append(targetString);
     return ResultList;
 }
-
-
+QString ListStringToString(QList<QString> inputList){
+    QString outstr="";
+    foreach (QString item, inputList) {
+        outstr.append(item);
+    }
+    return outstr;
+}
