@@ -162,12 +162,13 @@ private:
     QString resolveOperation(QString input0, QString m_operation, QString input1);
     bool determineCheckstate(QString Checkbox);
     bool validateCondition(QList<QString>* Condition);
+    bool validateSrc(QList<QString>* Src);
     bool elementIdExistInDb(QString Id);
 
 };
 
 QList<QString> StringToList(QString inputString, char seperator);
-QString StringListToString(QList<QString> inputList);
+QString StringListToString(QList<QString> inputList, QString separator);
 bool cmpStrings(QString A, QString B, int startA, int endA, int Boffset);
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck);
 #endif // RISK_MANAGER_H

@@ -1071,10 +1071,15 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
             if(column == colCondition){
                 QList<QString> m_Condition_list = convertConditionStringToList(item->text(column));
                 bool validCondition = validateCondition(&m_Condition_list);
-                item->setText(colCondition, StringListToString(m_Condition_list));
+                item->setText(colCondition, StringListToString(m_Condition_list, ""));
                 if(!validCondition){
                     item->setText(colCondition, "");
                 }
+            }
+            if(column == colsrc){
+                QList<QString> m_src_list = StringToList(item->text(column), ' ');
+                validateSrc(&m_src_list);
+                item->setText(colsrc, StringListToString(m_src_list, " "));
             }
         }
     }
@@ -1110,6 +1115,24 @@ bool Risk_Manager::validateCondition(QList<QString>* Condition){
         }
     }
     return true;
+}
+bool Risk_Manager::validateSrc(QList<QString>* Src){
+    for(int i=0; i<Src->length(); i++){
+        QString m_str = Src->at(i);
+        m_str = removeAllCharWhosMatch(m_str, ' ');
+        Src->removeAt(i);
+        Src->insert(i, m_str);
+        if(cmpStrings(IdRisk, Src->at(i), 0, sizeof(IdRisk)-2,0) || cmpStrings(IdGroup, Src->at(i), 0, sizeof(IdGroup)-2,0)){
+            if(elementIdExistInDb(Src->at(i))){
+
+            }else{
+                Src->removeAt(i);
+            }
+        }else{
+            Src->removeAt(i);
+        }
+    }
+
 }
 
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck){
@@ -1341,10 +1364,18 @@ QList<QString> StringToList(QString inputString, char separator){
     ResultList.append(targetString);
     return ResultList;
 }
-QString StringListToString(QList<QString> inputList){
+QString StringListToString(QList<QString> inputList, QString separator){
     QString outstr="";
+    bool firstItem=true;
     foreach (QString item, inputList) {
-        outstr.append(item);
+        if(firstItem){
+            outstr.append(item);
+            firstItem=false;
+        }else{
+            outstr.append(separator);
+            outstr.append(item);
+        }
+
     }
     return outstr;
 }
