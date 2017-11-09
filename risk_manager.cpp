@@ -392,16 +392,13 @@ void Risk_Manager::on_data_edit_dataTree_itemDoubleClicked(QTreeWidgetItem *item
     if(item->parent()==nullptr){
         return;
     }
-    if(cmpStrings(IdSetting, item->text(colId), 0,sizeof(IdSetting)-2,0)){
-        return;
-    }
     if(column==colId){
         return;
     }
     if(column>colDamageProbability){
         return;
     }
-    if(cmpStrings(IdLink, item->text(colCondition), 0, sizeof(IdLink)-2,0)){
+    if(cmpStrings(IdLink, item->text(colId), 0, sizeof(IdLink)-2,0)){
         if(column<=coldest){
             ui->data_edit_dataTree->editItem(item, column);
             return;
@@ -417,6 +414,9 @@ void Risk_Manager::on_data_edit_dataTree_itemDoubleClicked(QTreeWidgetItem *item
     }
     if(cmpStrings(IdRiskReduction, item->text(colId), 0, sizeof(IdRiskReduction)-2,0)){
         if(column==colRiskReduction){
+            ui->data_edit_dataTree->editItem(item, column);
+        }
+        if(column==colName){
             ui->data_edit_dataTree->editItem(item, column);
         }
         return;
@@ -472,7 +472,7 @@ void Risk_Manager::on_data_edit_dataTree_itemDoubleClicked(QTreeWidgetItem *item
             }
         }
         if(cmpStrings(SettingDefaultLink, item->text(colId), 0, sizeof(SettingDefaultLink)-2,0)){ //default Verknüpfung
-            if(column==colName){
+            if(column<=coldest){
                ui->data_edit_dataTree->editItem(item, column);
             }
         }
