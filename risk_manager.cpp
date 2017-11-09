@@ -1067,6 +1067,16 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
         foreach(QTreeWidgetItem* itemToChange, listItemToChange){
             copyallcols(itemToChange, item);
         }
+        if(cmpStrings(IdLink, item->text(colId), 0, sizeof(IdLink)-2,0)){ // Verknüpfung
+            if(column == colCondition){
+                QList<QString> m_Condition_list = convertConditionStringToList(item->text(column));
+                bool validCondition = validateCondition(&m_Condition_list);
+                item->setText(colCondition, StringListToString(m_Condition_list));
+                if(!validCondition){
+                    item->setText(colCondition, "");
+                }
+            }
+        }
     }
 }
 
@@ -1331,7 +1341,7 @@ QList<QString> StringToList(QString inputString, char separator){
     ResultList.append(targetString);
     return ResultList;
 }
-QString ListStringToString(QList<QString> inputList){
+QString StringListToString(QList<QString> inputList){
     QString outstr="";
     foreach (QString item, inputList) {
         outstr.append(item);

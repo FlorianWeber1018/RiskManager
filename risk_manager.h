@@ -167,7 +167,7 @@ private:
 };
 
 QList<QString> StringToList(QString inputString, char seperator);
-QString ListStringToString(QList<QString> inputList);
+QString StringListToString(QList<QString> inputList);
 bool cmpStrings(QString A, QString B, int startA, int endA, int Boffset);
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck);
 #endif // RISK_MANAGER_H
