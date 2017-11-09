@@ -1202,7 +1202,7 @@ void Risk_Manager::on_doc_edit_button_add_risks_from_rules_clicked()
     idString.append("0");
     QList<QTreeWidgetItem*>listRootItemCheckboxDoc = ui->doc_edit_treeWidget_document->findItems(idString, Qt::MatchExactly, colId);
     if(!listRootItemCheckboxDoc.isEmpty()){
-        QTreeWidgetItem* RootItemCheckboxDoc = listRootItemCheckboxDoc.first();
+
     }else{
         QMessageBox::information(this, "Zuerst Gerät spezifizieren", "Bitte zuerst Gerät spezifizieren und anschließend erneut versuchen.");
         return;

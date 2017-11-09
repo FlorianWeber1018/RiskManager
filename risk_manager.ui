@@ -231,6 +231,9 @@
           <property name="text">
            <string>S1.4.1</string>
           </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
+          </property>
          </item>
         </item>
         <item>
@@ -247,6 +250,9 @@
           <property name="text">
            <string>S1.5.1</string>
           </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
+          </property>
          </item>
         </item>
         <item>
@@ -262,6 +268,9 @@
           </property>
           <property name="text">
            <string>S1.6.1</string>
+          </property>
+          <property name="flags">
+           <set>ItemIsEditable|ItemIsEnabled</set>
           </property>
          </item>
         </item>
