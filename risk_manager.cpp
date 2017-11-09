@@ -1070,16 +1070,18 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
         if(cmpStrings(IdLink, item->text(colId), 0, sizeof(IdLink)-2,0)){ // Verknüpfung
             if(column == colCondition){
                 QList<QString> m_Condition_list = convertConditionStringToList(item->text(column));
-                bool validCondition = validateCondition(&m_Condition_list);
-                item->setText(colCondition, StringListToString(m_Condition_list, ""));
-                if(!validCondition){
-                    item->setText(colCondition, "");
-                }
+                validateCondition(&m_Condition_list);
+                item->setText(column, StringListToString(m_Condition_list, ""));
             }
             if(column == colsrc){
                 QList<QString> m_src_list = StringToList(item->text(column), ' ');
                 validateSrc(&m_src_list);
-                item->setText(colsrc, StringListToString(m_src_list, " "));
+                item->setText(column, StringListToString(m_src_list, " "));
+            }
+            if(column == coldest){
+                QList<QString> m_dest_list = StringToList(item->text(column), ' ');
+                validateDest(&m_dest_list);
+                item->setText(column, StringListToString(m_dest_list, " "));
             }
         }
     }
@@ -1093,30 +1095,39 @@ int Risk_Manager::getKat(int DamageExtent, int DamageProbability){
     return 0;
 }
 
-bool Risk_Manager::validateCondition(QList<QString>* Condition){
+void Risk_Manager::validateCondition(QList<QString>* Condition){
     for(int i=0; i<Condition->length(); i++){
         QString m_str = Condition->at(i);
         m_str = removeAllCharWhosMatch(m_str, ' ');
         Condition->removeAt(i);
         Condition->insert(i, m_str);
         if(m_str=="|" || m_str=="&"){
-
+            if(i+1==Condition->length()){
+                Condition->removeAt(i);
+            }else{
+                if(Condition->at(i+1)=="|" || Condition->at(i+1)=="&"){
+                    Condition->removeAt(i);
+                }else{
+                    if(i==0){
+                        Condition->removeAt(i);
+                    }
+                }
+            }
         }else{
             if(cmpStrings(IdCheckbox, m_str, 0, sizeof(IdCheckbox)-2,0)){
                 if(elementIdExistInDb(m_str)){
 
                 }else{
-                    return false;
+                    Condition->removeAt(i);
                 }
             }else{
-                return false;
+                Condition->removeAt(i);
             }
 
         }
     }
-    return true;
 }
-bool Risk_Manager::validateSrc(QList<QString>* Src){
+void Risk_Manager::validateSrc(QList<QString>* Src){
     for(int i=0; i<Src->length(); i++){
         QString m_str = Src->at(i);
         m_str = removeAllCharWhosMatch(m_str, ' ');
@@ -1134,7 +1145,24 @@ bool Risk_Manager::validateSrc(QList<QString>* Src){
     }
 
 }
+void Risk_Manager::validateDest(QList<QString>* Dest){
+    for(int i=0; i<Dest->length(); i++){
+        QString m_str = Dest->at(i);
+        m_str = removeAllCharWhosMatch(m_str, ' ');
+        Dest->removeAt(i);
+        Dest->insert(i, m_str);
+        if(cmpStrings(IdLifecycle, Dest->at(i), 0, sizeof(IdLifecycle)-2,0)){
+            if(elementIdExistInDb(Dest->at(i))){
 
+            }else{
+                Dest->removeAt(i);
+            }
+        }else{
+            Dest->removeAt(i);
+        }
+    }
+
+}
 QTreeWidgetItem* find_child(QTreeWidgetItem* ChildToFind, QTreeWidgetItem* ItemWithChildsToCheck){
     QList<QTreeWidgetItem*> listAvChilds;
     for(int i=0;i<ItemWithChildsToCheck->childCount();i++){
@@ -1242,7 +1270,9 @@ QList<QString> Risk_Manager::convertConditionStringToList(QString Condition){
     QString targetString="";
     while(Condition.length() > 0){
         if(Condition[0]=='|' || Condition[0]=='&'){
-            ConditionList.append(targetString);
+            if(targetString!=""){
+                ConditionList.append(targetString);
+            }
             targetString=Condition[0];
             ConditionList.append(targetString);
             targetString="";
@@ -1251,7 +1281,9 @@ QList<QString> Risk_Manager::convertConditionStringToList(QString Condition){
         }
         Condition=Condition.right(Condition.length()-1);
     }
-    ConditionList.append(targetString);
+    if(targetString!=""){
+        ConditionList.append(targetString);
+    }
     return ConditionList;
 }
 QString Risk_Manager::resolveOperation(QString i_input0, QString i_operation, QString i_input1){

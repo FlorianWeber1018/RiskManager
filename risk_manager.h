@@ -161,8 +161,9 @@ private:
     bool resolveOperation(bool input0, operation m_operation, bool input1);
     QString resolveOperation(QString input0, QString m_operation, QString input1);
     bool determineCheckstate(QString Checkbox);
-    bool validateCondition(QList<QString>* Condition);
-    bool validateSrc(QList<QString>* Src);
+    void validateCondition(QList<QString>* Condition);
+    void validateSrc(QList<QString>* Src);
+    void validateDest(QList<QString>* Dest);
     bool elementIdExistInDb(QString Id);
 
 };
