@@ -26,6 +26,7 @@
 #define colsrc 3
 #define coldest 4
 
+static const int mtx[4][5]={{1,1,1,1,2},{1,1,1,2,3},{1,2,2,3,3},{2,2,3,3,3}};
 
 
 #define IdSetting "S"
@@ -125,6 +126,8 @@ private slots:
     void on_doc_edit_button_set_checklist_clicked();
 
 private:
+    void expandPathToItem(QTreeWidgetItem* item, QTreeWidget* tree);
+    void collapsPathToItem(QTreeWidgetItem* item, QTreeWidget* tree);
     QTreeWidgetItem* copy_root_Item_to_dest_tree(QTreeWidgetItem* src, QTreeWidget* tree);
     void show_editSeletableRiskReduction(QTreeWidgetItem* item);
     void show_editDeviceSpecifications();

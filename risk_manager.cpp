@@ -21,9 +21,23 @@ Risk_Manager::Risk_Manager(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Risk_Manager)
 {
+
+
     this->strg_pressed=false;
 
     ui->setupUi(this);
+    QString style =
+       "QTreeWidget::item:!selected "
+        "{ "
+          "border: 1px solid gainsboro; "
+          "border-left: none; "
+          "border-top: none; "
+        "}"
+       "QTreeWidget::item:selected {}"
+       "QTreeWidget::item:"
+            ;
+
+    ui->data_edit_dataTree->setStyleSheet(style);
     ui->data_edit_dataTree->setSortingEnabled(true);
     ui->data_edit_dataTree->setColumnWidth(0,250);
     ui->data_edit_dataTree->setColumnWidth(1,20);
@@ -33,6 +47,7 @@ Risk_Manager::Risk_Manager(QWidget *parent) :
 
     ui->doc_edit_treeWidget_database->setColumnWidth(0,200);
 
+    ui->doc_edit_treeWidget_document->setSortingEnabled(true);
     ui->doc_edit_treeWidget_document->setColumnWidth(0,250);
     ui->doc_edit_treeWidget_document->setColumnWidth(1,50);
     ui->doc_edit_treeWidget_document->setColumnWidth(2,200);
@@ -45,6 +60,11 @@ Risk_Manager::Risk_Manager(QWidget *parent) :
     ui->doc_edit_treeWidget_document->setColumnWidth(9,35);
 }
 
+
+Risk_Manager::~Risk_Manager()
+{
+    delete ui;
+}
 QTreeWidgetItem* Risk_Manager::AddRoot(QTreeWidget* tree, QString name, QString Id)
 {
     QTreeWidgetItem *itm = new QTreeWidgetItem(tree);
@@ -68,11 +88,6 @@ void Risk_Manager::copyallcols(QTreeWidgetItem *dest, QTreeWidgetItem *src){
         dest->setText(i,src->text(i));
     }
 }
-Risk_Manager::~Risk_Manager()
-{
-    delete ui;
-}
-
 bool Risk_Manager::event(QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -115,10 +130,38 @@ bool Risk_Manager::event(QEvent *event)
 
     return QWidget::event(event);
 }
+
 void Risk_Manager::UpDnHandler(bool dir){//dir=false->up dir=true->down
     QMessageBox msgBox;
     if(ui->tabWidget->currentIndex()==0){
         QList<QTreeWidgetItem*> selectedItems = ui->data_edit_dataTree->selectedItems();
+        if(selectedItems.count()==1){
+            QTreeWidgetItem* item_selected = selectedItems.first();
+            QTreeWidgetItem* parent = item_selected->parent();
+            int index_selected = parent->indexOfChild(item_selected);
+            if(dir){
+                if(index_selected==0){
+                    return;
+                }else{
+                     parent->insertChild(index_selected-1,parent->takeChild(index_selected));
+                     parent->child(index_selected-1)->setSelected(true);
+                }
+            }else{
+                if(index_selected==parent->childCount()-1){
+                    return;
+                }else{
+                     parent->insertChild(index_selected+1,parent->takeChild(index_selected));
+                     parent->child(index_selected+1)->setSelected(true);
+                }
+            }
+        }else{
+            msgBox.setText("Verschieben nur möglich wenn genau ein Element selektiert ist");
+            msgBox.exec();
+            return;
+        }
+    }
+    if(ui->tabWidget->currentIndex()==1){
+        QList<QTreeWidgetItem*> selectedItems = ui->doc_edit_treeWidget_document->selectedItems();
         if(selectedItems.count()==1){
             QTreeWidgetItem* item_selected = selectedItems.first();
             QTreeWidgetItem* parent = item_selected->parent();
@@ -155,17 +198,19 @@ void Risk_Manager::show_editSeletableRiskReduction(QTreeWidgetItem* item){
     QList<QTreeWidgetItem*> listSrcRootItem=ui->data_edit_dataTree->findItems(idRoot, Qt::MatchExactly, colId);
     if(!listSrcRootItem.isEmpty()){
         srcRootItem=listSrcRootItem.first();
+        if(srcRootItem!=nullptr){
+            copy_root_Item_to_dest_tree(srcRootItem, tree);
+        }else{
+            return;
+        }
+    }else{
+        return;
     }
-    if(srcRootItem!=nullptr){
-        copy_root_Item_to_dest_tree(srcRootItem, tree);
-    }
+
     QList<QTreeWidgetItem*>listRiskReductionMatchsCurrentTraget = tree->findItems(item->text(colRiskReduction),Qt::MatchExactly | Qt::MatchRecursive ,colRiskReduction );
     if(!listRiskReductionMatchsCurrentTraget.isEmpty()){
         listRiskReductionMatchsCurrentTraget.first()->setSelected(true);
-        if(listRiskReductionMatchsCurrentTraget.first()->parent()!=nullptr){
-            tree->expandItem(listRiskReductionMatchsCurrentTraget.first()->parent());
-        }
-
+        expandPathToItem(listRiskReductionMatchsCurrentTraget.first(), ui->data_edit_dataTree);
     }
 
 
@@ -354,8 +399,12 @@ void Risk_Manager::on_data_edit_dataTree_itemClicked(QTreeWidgetItem *item, int 
             if(item->isSelected()){
                 item->setSelected(false);
             }else{
-                foreach(QTreeWidgetItem* selecteditem, ui->data_edit_dataTree->selectedItems()){
-                        selecteditem->setSelected(false);
+                if(!strg_pressed){
+                    foreach(QTreeWidgetItem* selecteditem, ui->data_edit_dataTree->selectedItems()){
+                        if(cmpStrings(IdLifecycle, selecteditem->text(colId), 0,sizeof(IdLifecycle)-2,0)){
+                            selecteditem->setSelected(false);
+                        }
+                    }
                 }
                 item->setSelected(true);
             }
@@ -374,16 +423,77 @@ void Risk_Manager::on_data_edit_dataTree_itemClicked(QTreeWidgetItem *item, int 
         }
     }
     if(cmpStrings(IdLink, item->text(colId), 0,sizeof(IdLink)-2,0)){
+
+
+
+
+
         if(item->parent()!=nullptr){
             if(item->isSelected()){
                 item->setSelected(false);
+                QList<QString> srcNameList;
+                QList<QString> destNameList;
+                foreach(QTreeWidgetItem* item, ui->data_edit_dataTree->selectedItems()){
+                    if(cmpStrings(IdRisk, item->text(colId), 0, sizeof(IdRisk)-2, 0)){
+                        srcNameList.append(item->text(colId));
+                    }
+                    if(cmpStrings(IdGroup, item->text(colId), 0, sizeof(IdGroup)-2, 0)){
+                        srcNameList.append(item->text(colId));
+                    }
+                    if(cmpStrings(IdLifecycle, item->text(colId), 0, sizeof(IdLifecycle)-2, 0)){
+                        destNameList.append(item->text(colId));
+                    }
+                    item->setSelected(false);
+                    collapsPathToItem(item, ui->data_edit_dataTree);
+                }
+                item->setText(colsrc, StringListToString(srcNameList, " "));
+                item->setText(coldest, StringListToString(destNameList, " "));
+
             }else{
                 foreach(QTreeWidgetItem* selecteditem, ui->data_edit_dataTree->selectedItems()){
-                        selecteditem->setSelected(false);
+                    selecteditem->setSelected(false);
+                }
+
+                QList<QString> srcStringList =  StringToList(item->text(colsrc), ' ');
+                QList<QString> destStringList = StringToList(item->text(coldest), ' ');
+                foreach(QString ItemString, srcStringList){
+                    QList<QTreeWidgetItem*> srcItemList = ui->data_edit_dataTree->findItems(ItemString, Qt::MatchExactly | Qt::MatchRecursive, colId);
+
+                    for(int i=0; i < srcItemList.length(); i++){
+                        if(cmpStrings(IdGroup, srcItemList.at(i)->text(colId), 0, sizeof(IdGroup)-2, 0)){
+                            srcItemList.at(i)->setSelected(true);
+                            expandPathToItem(srcItemList.at(i), ui->data_edit_dataTree);
+                            break;
+                        }
+                        if(cmpStrings(IdRisk, srcItemList.at(i)->text(colId), 0, sizeof(IdRisk)-2, 0)){
+                            if(srcItemList.at(i)->parent()!=nullptr){
+                                if(cmpStrings(IdRisk, srcItemList.at(i)->parent()->text(colId), 0, sizeof(IdRisk)-2, 0)){
+                                    srcItemList.at(i)->setSelected(true);
+                                    expandPathToItem(srcItemList.at(i), ui->data_edit_dataTree);
+                                    break;
+                                }
+                                if(cmpStrings(IdGroup, srcItemList.at(i)->parent()->text(colId), 0, sizeof(IdGroup)-2, 0)){
+                                    continue;
+                                }
+                            }else{
+                                continue;
+                            }
+                        }
+                    }
+                }
+                foreach(QString ItemString, destStringList){
+                    QList<QTreeWidgetItem*> destItemList = ui->data_edit_dataTree->findItems(ItemString, Qt::MatchExactly | Qt::MatchRecursive, colId);
+                    if(!destItemList.isEmpty()){
+                        QTreeWidgetItem* targetDest = destItemList.first();
+                        targetDest->setSelected(true);
+                        expandPathToItem(targetDest, ui->data_edit_dataTree);
+                    }
                 }
                 item->setSelected(true);
             }
         }
+
+
     }
 
 }
@@ -572,6 +682,7 @@ void Risk_Manager::on_doc_edit_button_save_document_clicked()
         return;
     }else{
         qtreewidget_toxml myxmlconv;
+        ui->doc_edit_treeWidget_document->sortItems(colId,Qt::AscendingOrder);
         QString outString=myxmlconv.convert_treetoxml(ui->doc_edit_treeWidget_document);
         if(write_file(outString, fileName)){
             msgBox.setText("Datei nicht erfolgreich gespeichert");
@@ -694,6 +805,7 @@ void Risk_Manager::on_doc_edit_button_link_risk_to_lifecycle_clicked()
 
 void Risk_Manager::on_doc_edit_button_plot_pdf_clicked()
 {
+    ui->doc_edit_treeWidget_document->sortItems(colId,Qt::AscendingOrder);
     QMessageBox msgBox;
     qtreewidget_totextable mytexconv;
     QString texString = "";
@@ -733,7 +845,7 @@ void Risk_Manager::on_doc_edit_button_plot_pdf_clicked()
         }
 
         QProcess *proc = new QProcess;
-        QString compiler_cmd="xelatex -output-directory " + Workdir + " " + Path_tex;
+        QString compiler_cmd="xelatex -output-directory \"" + Workdir + "\" \"" + Path_tex + "\"";
         proc->start(compiler_cmd);
         proc->waitForFinished();
 
@@ -890,10 +1002,11 @@ QTreeWidgetItem* Risk_Manager::copy_root_Item_to_dest_tree(QTreeWidgetItem* src,
 }
 QTreeWidgetItem* Risk_Manager::copy_leaf_source_to_destination(QTreeWidgetItem* src, QTreeWidgetItem* dest){
     bool alreadythere=false;
-    QTreeWidgetItem* newItem;
+    QTreeWidgetItem* newItem=nullptr;
     for(int i=0; i < dest->childCount(); i++){
         if(dest->child(i)->text(colId)==src->text(colId)){
             alreadythere=true;
+            newItem = dest->child(i);
         }
     }
 
@@ -908,7 +1021,7 @@ QTreeWidgetItem* Risk_Manager::copy_leaf_source_to_destination(QTreeWidgetItem* 
 }
 QTreeWidgetItem* Risk_Manager::copy_branch_source_to_destination(bool resolvebranch, QTreeWidgetItem* branch, QTreeWidgetItem* dest)
 {
-    QTreeWidgetItem* newItem;
+    QTreeWidgetItem* newItem = dest;
     if(branch->childCount()>0){
         if(resolvebranch){
 
@@ -944,7 +1057,7 @@ void Risk_Manager::copy_dist_list(QList<QTreeWidgetItem*> src, QList<QTreeWidget
 
 }
 QTreeWidgetItem* Risk_Manager::copy_dist_branch_source_to_destination(bool resolvebranch, QTreeWidgetItem* branch, QTreeWidgetItem* dest){
-    QTreeWidgetItem* newItem;
+    QTreeWidgetItem* newItem = dest;
     if(branch->childCount()>0){
         if(resolvebranch){
 
@@ -1061,6 +1174,11 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
                 item->setText(colKat2, "");
                 item->setText(colKat3, "");
             }
+            if(Kat==0){
+                item->setText(colKat1, "");
+                item->setText(colKat2, "");
+                item->setText(colKat3, "");
+            }
         }
         QList<QTreeWidgetItem*> listItemToChange = ui->data_edit_dataTree->findItems(item->text(colId),Qt::MatchExactly | Qt::MatchRecursive,colId);
         listItemToChange = searchItems(listItemToChange, IdRisk, Qt::MatchStartsWith, colId);
@@ -1088,46 +1206,76 @@ void Risk_Manager::on_data_edit_dataTree_itemChanged(QTreeWidgetItem *item, int 
 }
 
 int Risk_Manager::getKat(int DamageExtent, int DamageProbability){
-    if(DamageExtent >= 1 && DamageExtent <=4 && DamageProbability >=1 && DamageProbability <= 5){
-            static const int mtx[4][5]={{1,1,1,1,2},{1,1,1,2,3},{1,2,2,3,3},{2,2,3,3,3}};
+    if(DamageExtent >= 1 && DamageExtent <= (int)( sizeof(mtx)/sizeof(mtx[0]) ) && DamageProbability >=1 && DamageProbability <= (int)( sizeof(mtx[0])/sizeof(mtx[0][0]) ) ){
             return mtx[DamageExtent-1][DamageProbability-1];
+    }else{
+        return 0;
     }
-    return 0;
+
 }
 
 void Risk_Manager::validateCondition(QList<QString>* Condition){
+    QMessageBox msgBox;
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
     for(int i=0; i<Condition->length(); i++){
         QString m_str = Condition->at(i);
         m_str = removeAllCharWhosMatch(m_str, ' ');
+
+        if(Condition->length()==1 && (Condition->at(0)=="T" || Condition->at(0)=="F")){
+            return;
+        }
+
         Condition->removeAt(i);
         Condition->insert(i, m_str);
         if(m_str=="|" || m_str=="&"){
             if(i+1==Condition->length()){
-                Condition->removeAt(i);
+                msgBox.setText("Das Element \"" + Condition->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                if(msgBox.exec()==QMessageBox::Ok){
+                    Condition->removeAt(i);
+                }
             }else{
                 if(Condition->at(i+1)=="|" || Condition->at(i+1)=="&"){
-                    Condition->removeAt(i);
+                    msgBox.setText("Das Element \"" + Condition->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                    if(msgBox.exec()==QMessageBox::Ok){
+                        Condition->removeAt(i);
+                    }
                 }else{
                     if(i==0){
-                        Condition->removeAt(i);
+                        msgBox.setText("Das Element \"" + Condition->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                        if(msgBox.exec()==QMessageBox::Ok){
+                            Condition->removeAt(i);
+                        }
                     }
                 }
             }
         }else{
-            if(cmpStrings(IdCheckbox, m_str, 0, sizeof(IdCheckbox)-2,0)){
-                if(elementIdExistInDb(m_str)){
+            if(m_str[0]=='!'){
+                m_str = m_str.right(m_str.length()-1);
+            }
+            if((m_str=="T" || Condition->at(0)=="T")){
+                            return;
+                        }
+            if(cmpStrings(IdCheckbox, m_str, 0, sizeof(IdCheckbox)-2,0) || (m_str=="T" || m_str=="F")){
+                if(elementIdExistInDb(m_str) || (m_str=="T" || m_str=="F")){
 
                 }else{
-                    Condition->removeAt(i);
+                    msgBox.setText("Das Element \"" + Condition->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                    if(msgBox.exec()==QMessageBox::Ok){
+                        Condition->removeAt(i);
+                    }
                 }
             }else{
-                Condition->removeAt(i);
+                msgBox.setText("Das Element \"" + Condition->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                if(msgBox.exec()==QMessageBox::Ok){
+                    Condition->removeAt(i);
+                }
             }
-
         }
     }
 }
 void Risk_Manager::validateSrc(QList<QString>* Src){
+    QMessageBox msgBox;
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
     for(int i=0; i<Src->length(); i++){
         QString m_str = Src->at(i);
         m_str = removeAllCharWhosMatch(m_str, ' ');
@@ -1137,15 +1285,23 @@ void Risk_Manager::validateSrc(QList<QString>* Src){
             if(elementIdExistInDb(Src->at(i))){
 
             }else{
-                Src->removeAt(i);
+                msgBox.setText("Das Element \"" + Src->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                if(msgBox.exec()==QMessageBox::Ok){
+                    Src->removeAt(i);
+                }
             }
         }else{
-            Src->removeAt(i);
+            msgBox.setText("Das Element \"" + Src->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+            if(msgBox.exec()==QMessageBox::Ok){
+                Src->removeAt(i);
+            }
         }
     }
 
 }
 void Risk_Manager::validateDest(QList<QString>* Dest){
+    QMessageBox msgBox;
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
     for(int i=0; i<Dest->length(); i++){
         QString m_str = Dest->at(i);
         m_str = removeAllCharWhosMatch(m_str, ' ');
@@ -1155,10 +1311,16 @@ void Risk_Manager::validateDest(QList<QString>* Dest){
             if(elementIdExistInDb(Dest->at(i))){
 
             }else{
-                Dest->removeAt(i);
+                msgBox.setText("Das Element \"" + Dest->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+                if(msgBox.exec()==QMessageBox::Ok){
+                    Dest->removeAt(i);
+                }
             }
         }else{
-            Dest->removeAt(i);
+            msgBox.setText("Das Element \"" + Dest->at(i) + "\" ist ungültig.\n Soll es entfernt werden?");
+            if(msgBox.exec()==QMessageBox::Ok){
+                Dest->removeAt(i);
+            }
         }
     }
 
@@ -1188,14 +1350,10 @@ bool cmpStrings(QString A, QString B, int startA, int endA, int offsetB){
     return true;
 }
 
-
-
-
-
 void Risk_Manager::on_doc_edit_button_add_risks_from_rules_clicked()
 {
     if(ui->data_edit_lineEdit_currentOpenedFile->text().isEmpty()){
-        QMessageBox::information(this, "Zuerst Datenbank Öffnen", "Die Regeln sind in der der Datenbank definiert. Bitte zuerst die zugehörige Datenbak öffnen und anschließend erneut versuchen.");
+        QMessageBox::information(this, "Zuerst Datenbank Öffnen", "Die Regeln sind in der der Datenbank definiert. Bitte zuerst die zugehörige Datenbank öffnen und anschließend erneut versuchen.");
         return;
     }
     QString idString=IdCheckbox;
@@ -1243,8 +1401,6 @@ void Risk_Manager::on_doc_edit_button_add_risks_from_rules_clicked()
         QMessageBox::information(this, "Keine Lebensphasen in Datenbank vorhanden", "Es ist keine Datenbank geöffnet oder die geöffnete Datenbank enthält keine Lebensphasen.");
         return;
     }
-
-
 }
 bool Risk_Manager::resolveCondition(QString Condition){
     QList<QString>ConditionList = convertConditionStringToList(Condition);
@@ -1255,15 +1411,20 @@ bool Risk_Manager::resolveCondition(QString Condition){
         ConditionList.pop_front();
         ConditionList.push_front(resultSingle);
     }
-    if(ConditionList.at(0)=='T'){
-        return true;
-    }else{
-        if(ConditionList.at(0)=='F'){
-            return false;
+    if(ConditionList.count()==1){
+        if(ConditionList.at(0)=='T'){
+            return true;
         }else{
-            return determineCheckstate(ConditionList.at(0));
+            if(ConditionList.at(0)=='F'){
+                return false;
+            }else{
+                return determineCheckstate(ConditionList.at(0));
+            }
         }
+    }else{
+        return true;
     }
+
 }
 QList<QString> Risk_Manager::convertConditionStringToList(QString Condition){
     QList<QString>ConditionList;
@@ -1289,7 +1450,7 @@ QList<QString> Risk_Manager::convertConditionStringToList(QString Condition){
 QString Risk_Manager::resolveOperation(QString i_input0, QString i_operation, QString i_input1){
     bool m_input0;
     bool m_input1;
-    operation m_operation;
+    operation m_operation=OR;
     if(i_input0 == "T"){
         m_input0=true;
     }else{
@@ -1410,4 +1571,24 @@ QString StringListToString(QList<QString> inputList, QString separator){
 
     }
     return outstr;
+}
+void Risk_Manager::expandPathToItem(QTreeWidgetItem* item, QTreeWidget* tree){
+    QTreeWidgetItem* parent=nullptr;
+    if(item->parent()!=nullptr){
+        parent=item->parent();
+    }
+    while (parent!=nullptr) {
+        tree->expandItem(parent);
+        parent=parent->parent();
+    }
+}
+void Risk_Manager::collapsPathToItem(QTreeWidgetItem* item, QTreeWidget* tree){
+    QTreeWidgetItem* parent=nullptr;
+    if(item->parent()!=nullptr){
+        parent=item->parent();
+    }
+    while (parent!=nullptr) {
+        tree->collapseItem(parent);
+        parent=parent->parent();
+    }
 }

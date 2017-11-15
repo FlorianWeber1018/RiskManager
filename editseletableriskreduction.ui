@@ -6,70 +6,67 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
+    <width>437</width>
     <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>730</x>
-     <y>20</y>
-     <width>81</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QTreeWidget" name="treeWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>691</width>
-     <height>261</height>
-    </rect>
-   </property>
-   <attribute name="headerDefaultSectionSize">
-    <number>200</number>
-   </attribute>
-   <attribute name="headerMinimumSectionSize">
-    <number>29</number>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>Name</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>ID</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string/>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string/>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Risikominderung</string>
-    </property>
-   </column>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QTreeWidget" name="treeWidget">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <attribute name="headerDefaultSectionSize">
+        <number>200</number>
+       </attribute>
+       <attribute name="headerMinimumSectionSize">
+        <number>29</number>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>Name</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>ID</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string/>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string/>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Risikominderung</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

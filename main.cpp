@@ -7,5 +7,6 @@ int main(int argc, char *argv[])
     Risk_Manager w;
     w.show();
 
+
     return a.exec();
 }
