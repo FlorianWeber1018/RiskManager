@@ -38,6 +38,8 @@ Risk_Manager::Risk_Manager(QWidget *parent) :
             ;
 
     ui->data_edit_dataTree->setStyleSheet(style);
+    ui->doc_edit_treeWidget_database->setStyleSheet(style);
+    ui->doc_edit_treeWidget_document->setStyleSheet(style);
     ui->data_edit_dataTree->setSortingEnabled(true);
     ui->data_edit_dataTree->setColumnWidth(0,250);
     ui->data_edit_dataTree->setColumnWidth(1,20);
@@ -1051,7 +1053,16 @@ void Risk_Manager::copy_dist_list(QList<QTreeWidgetItem*> src, QList<QTreeWidget
 
     foreach (QTreeWidgetItem* srcItem, src) {
         foreach (QTreeWidgetItem* destItem, dest) {
-            copy_dist_branch_source_to_destination(resolve_src, srcItem, destItem);
+            if(cmpStrings(IdGroup, srcItem->text(colId),0,sizeof(IdGroup)-1,0)){
+                copy_dist_branch_source_to_destination(resolve_src, srcItem, destItem); //group
+            }else{
+                if(cmpStrings(IdRisk, srcItem->text(colId),0,sizeof(IdRisk)-1,0)){
+                    copy_dist_branch_source_to_destination(false, srcItem, destItem);   //risk
+                }else{
+                    copy_dist_branch_source_to_destination(resolve_src, srcItem, destItem); //other
+                }
+            }
+
         }
     }
 

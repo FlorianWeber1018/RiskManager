@@ -40,7 +40,7 @@
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Datenbank Editieren</string>
+        <string>Datenbank editieren</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -603,7 +603,7 @@
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>Lebensphasen editieren</string>
+        <string>Dokument editieren</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
